@@ -1,6 +1,6 @@
 {
     "packages": {
-        "crates/*": {
+        ".": {
             "release-type": "rust",
             "changelog-path": "CHANGELOG.md"
         },
