@@ -5,16 +5,16 @@ on:
     branches:
       - main
 
-permissions:
-  pull-requests: write
-  contents: write
-
 jobs:
   release-please:
     if: github.repository_owner == 'alisamji-ybor'
 
     name: Attempt to Release
     runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+      contents: write
 
     concurrency:
       group: release-please-${{ github.ref }}
