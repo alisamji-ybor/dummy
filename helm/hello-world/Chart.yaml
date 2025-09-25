@@ -1,3 +1,4 @@
+# I AM NOT A CHORE
 apiVersion: v2
 name: hello-world
 description: A Helm chart for Kubernetes
