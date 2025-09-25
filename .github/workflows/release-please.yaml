@@ -31,7 +31,7 @@ jobs:
           crate: cargo-workspace
       - name: Run release-please
         id: release-please
-        uses: release-please/action@v4
+        uses: googleapis/release-please-action@v4
         with:
           token: ${{ github.token }}
       # TODO: Uncomment the following. It might be needed.
