@@ -1,6 +1,9 @@
 {
     "release-type": "rust",
     "packages": {
+        "crates/hello-world": {
+            "changelog-path": "CHANGELOG.md"
+        },
         "helm/hello-world": {
             "release-type": "helm",
             "changelog-path": "CHANGELOG.md",
