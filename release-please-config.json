@@ -3,6 +3,10 @@
         "crates/hello-world": {
             "release-type": "rust",
             "changelog-path": "CHANGELOG.md"
+        },
+        "helm/hello-world": {
+            "release-type": "helm",
+            "changelog-path": "CHANGELOG.md"
         }
     }
 }
