@@ -7,7 +7,7 @@ on:
 
 jobs:
   release-please:
-    if: ${{ github.repository_owner == "ali-ybor" }}
+    if: github.repository_owner == 'alisamji-ybor'
 
     name: Attempt to Release
     runs-on: ubuntu-latest
