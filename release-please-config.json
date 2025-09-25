@@ -1,0 +1,8 @@
+{
+    "packages": {
+        "crates/hello-world": {
+            "release-type": "rust",
+            "changelog-path": "CHANGELOG.md"
+        }
+    }
+}
