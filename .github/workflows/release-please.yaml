@@ -9,7 +9,7 @@ jobs:
   release-please:
     if: github.repository_owner == 'alisamji-ybor'
 
-    name: Attempt to Release
+    name: Create Release or Bump Version
     runs-on: ubuntu-latest
 
     permissions:
@@ -20,26 +20,16 @@ jobs:
       group: release-please-${{ github.ref }}
       cancel-in-progress: false
 
+    outputs:
+      release_created: ${{ steps.release-please.outputs.releases_created || steps.release-please.outputs.release_created }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
-      - name: Install cargo-workspace
-        uses: baptiste0928/cargo-install@v3
-        with:
-          crate: cargo-workspace
       - name: Run release-please
         id: release-please
         uses: googleapis/release-please-action@v4
         with:
           token: ${{ github.token }}
-      # TODO: Uncomment the following. It might be needed.
-      # Or it might be better to have a separate workflow running on created tags/release.
-      # - uses: druzsan/setup-matrix@v2
-      #   id: setup-matrix
-      #   with:
-      #     matrix: |
-      #       os: [ubuntu-latest, windows-latest, macos-latest, macos-13]
-      #       tag: ${{ toJSON(fromJSON(steps.release-plz.outputs.releases).*.tag) }}
-      #   if: ${{ steps.release-plz.outputs.releases_created == 'true' }}
