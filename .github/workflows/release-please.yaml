@@ -61,7 +61,7 @@ jobs:
         with:
           ref: ${{ needs.release-please.outputs.pr_branch }}
       - run: |
-          VERSION=$(jq -r '."'$APP_PATH'"' .release-please.manifest.json)
+          VERSION=$(jq -r '."'$APP_PATH'"' .release-please-manifest.json)
           sed -i "s/appVersion:.*/appVersion: $VERSION/" $CHART_PATH/Chart.yaml
           # git diff returns an error if there are unstaged changes
           if git diff --quiet; then
