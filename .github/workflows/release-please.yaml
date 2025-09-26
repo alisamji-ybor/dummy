@@ -21,7 +21,7 @@ jobs:
     outputs:
       release_created: ${{ steps.release-please.outputs.releases_created || steps.release-please.outputs.release_created }}
       pr_created: ${{ steps.release-please.outputs.prs_created || steps.release-please.outputs.pr_created }}
-      pr_branch: ${{ fromJSON(steps.release-please.outputs.pr).headBranchName }}
+      pr_branch: ${{ fromJSON(steps.release-please.outputs.pr || "{}").headBranchName }}
       version: ${{ steps.release-please.outputs['crates/hello-world--version'] }}
       helmVersion: ${{ steps.release-please.outputs['helm/hello-world--version'] }}
 
@@ -74,7 +74,7 @@ jobs:
             # Using the gh cli produces a VERIFIED commit.
             SHA=$(gh api '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml?ref='$BRANCH | jq -r .sha)
             gh api --method PUT '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml' \
-              -F message='chore: update helm appVersion.' \
+              -F message='fix: update helm appVersion.' \
               -F content="$(base64 -w0 -i $CHART_PATH/Chart.yaml)" \
               -F 'committer[name]'='github-actions[bot]' \
               -F 'committer[email]'='41898282+github-actions[bot]@users.noreply.github.com' \
