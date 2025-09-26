@@ -21,7 +21,7 @@ jobs:
     outputs:
       release_created: ${{ steps.release-please.outputs.releases_created || steps.release-please.outputs.release_created }}
       pr_created: ${{ steps.release-please.outputs.prs_created || steps.release-please.outputs.pr_created }}
-      pr_branch: ${{ fromJSON(steps.release-please.outputs.pr || "{}").headBranchName }}
+      pr_branch: ${{ fromJSON(steps.release-please.outputs.pr).headBranchName || "" }}
       version: ${{ steps.release-please.outputs['crates/hello-world--version'] }}
       helmVersion: ${{ steps.release-please.outputs['helm/hello-world--version'] }}
 
