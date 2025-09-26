@@ -54,7 +54,7 @@ jobs:
       CHART_PATH: helm/hello-world
       APP_PATH: crates/hello-world
       BRANCH: ${{ needs.release-please.outputs.pr_branch }}
-      # GH_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
 
     steps:
       - name: Checkout repository
