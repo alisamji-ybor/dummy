@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/alisamji-ybor/dummy/compare/helm-v1.1.0...helm-v1.1.1) (2025-09-26)
+
+
+### Bug Fixes
+
+* update helm appVersion. ([36e5035](https://github.com/alisamji-ybor/dummy/commit/36e5035ef505ebb4e397e7e99177554fa7ec914e))
+
 ## [1.1.0](https://github.com/alisamji-ybor/dummy/compare/helm-v1.0.0...helm-v1.1.0) (2025-09-25)
 
 
