@@ -1,0 +1,42 @@
+name: Sync Helm appVersion
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+
+jobs:
+  sync:
+    name: Sync Helm appVersion
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - run: |
+          VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages | map(select(.name =="github_operator_bin")) | .[].version')
+          sed -i "s/appVersion:.*/appVersion: $VERSION/" helm/Chart.yaml
+          pipx install pybump
+          # git diff returns an error if there are unstaged changes
+          if git diff --quiet; then
+            echo 'App Version already in sync.'
+          else
+            echo 'App Version needs syncing. Making commit.'
+            pybump bump --file helm/Chart.yaml --level patch
+            # Using the gh cli produces a VERIFIED commit.
+            SHA=$(gh api '/repos/${{ github.repository }}/contents/helm/Chart.yaml' | jq -r .sha)
+            gh api --method PUT '/repos/${{ github.repository }}/contents/helm/Chart.yaml' \
+              -F message='chore: update helm appVersion.' \
+              -F content="$(base64 -w0 helm/Chart.yaml)" \
+              -F committer='{"name":"github-actions","email":"github-actions@github.com"}' \
+              -F sha="$SHA" \
+              -F branch='${{ github.head_ref }}'
+          fi
+
