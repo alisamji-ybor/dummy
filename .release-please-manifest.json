@@ -1,5 +1,5 @@
 {
-  "crates/hello-world": "1.0.0",
+  "crates/hello-world": "1.1.0",
   "helm/hello-world": "1.1.0"
 }
 

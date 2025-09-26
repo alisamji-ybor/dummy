@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/alisamji-ybor/dummy/compare/hello-world-v1.0.0...hello-world-v1.1.0) (2025-09-26)
+
+
+### Features
+
+* update output. ([806491f](https://github.com/alisamji-ybor/dummy/commit/806491fb43bceb0e30650bd0d16ff3bc084fd155))
+
 ## [1.0.0](https://github.com/alisamji-ybor/dummy/compare/hello-world-v0.3.0...hello-world-v1.0.0) (2025-09-26)
 
 
