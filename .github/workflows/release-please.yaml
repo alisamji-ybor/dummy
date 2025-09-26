@@ -76,7 +76,8 @@ jobs:
             gh api --method PUT '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml' \
               -F message='chore: update helm appVersion.' \
               -F content="$(base64 -w0 -i $CHART_PATH/Chart.yaml)" \
-              -F committer='{"name":"github-actions","email":"41898282@users.noreply.github.com"}' \
+              -F 'committer[name]'='github-actions[bot]' \
+              -F 'committer[email]'='41898282+github-actions[bot]@users.noreply.github.com' \
               -F sha="$SHA" \
               -F branch="$BRANCH"
           fi
