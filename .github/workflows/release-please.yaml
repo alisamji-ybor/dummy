@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: release-please-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release-please:
     name: Create Release or Bump Version
@@ -13,10 +17,6 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-
-    concurrency:
-      group: release-please-${{ github.ref }}
-      cancel-in-progress: false
 
     outputs:
       release_created: ${{ steps.release-please.outputs.releases_created || steps.release-please.outputs.release_created }}
