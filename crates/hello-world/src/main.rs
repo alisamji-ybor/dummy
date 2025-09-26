@@ -1,3 +1,3 @@
 fn main() {
-    println!("Hello, nurse!");
+    println!("What's up, doc?");
 }
