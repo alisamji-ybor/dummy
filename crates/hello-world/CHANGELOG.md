@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.0](https://github.com/alisamji-ybor/dummy/compare/hello-world-v1.3.1...hello-world-v2.0.0) (2025-09-27)
+
+
+### Miscellaneous Chores
+
+* release 2.0.0 ([0667105](https://github.com/alisamji-ybor/dummy/commit/06671053408f8f24657372482ff61fb360b99aa2))
+
 ## [1.3.1](https://github.com/alisamji-ybor/dummy/compare/hello-world-v1.3.0...hello-world-v1.3.1) (2025-09-27)
 
 
