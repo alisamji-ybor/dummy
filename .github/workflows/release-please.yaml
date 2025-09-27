@@ -21,9 +21,7 @@ jobs:
     outputs:
       release_created: ${{ steps.release-please.outputs.releases_created || steps.release-please.outputs.release_created }}
       pr_created: ${{ steps.release-please.outputs.prs_created || steps.release-please.outputs.pr_created }}
-      pr_branch: ${{ fromJSON(steps.release-please.outputs.pr).headBranchName || '' }}
-      version: ${{ steps.release-please.outputs['crates/hello-world--version'] }}
-      helmVersion: ${{ steps.release-please.outputs['helm/hello-world--version'] }}
+      pr: ${{ steps.release-please.outputs.pr || '{}' }}
 
     steps:
       - name: Checkout repository
@@ -33,12 +31,10 @@ jobs:
         uses: googleapis/release-please-action@v4
         with:
           token: ${{ github.token }}
-      - env:
-          RELEASE_PLEASE_RESULTS: ${{ toJSON(steps.release-please.outputs) }}
-        run: |
-          echo "$RELEASE_PLEASE_RESULTS"
+      # - name: Force Publish Helm
 
-  sync:
+# github.event.repository.default_branch
+  helmVersionHack:
     name: Sync Helm appVersion
     runs-on: ubuntu-latest
 
@@ -53,31 +49,50 @@ jobs:
     env:
       CHART_PATH: helm/hello-world
       APP_PATH: crates/hello-world
-      BRANCH: ${{ needs.release-please.outputs.pr_branch }}
+      HEAD_BRANCH: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
+      BASE_BRANCH: ${{ fromJSON(needs.release-please.outputs.pr).baseBranchName }}
       GH_TOKEN: ${{ github.token }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ needs.release-please.outputs.pr_branch }}
-      - run: |
+          ref: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
+      - name: Sync App Version
+        run: |
           VERSION=$(jq -r '."'$APP_PATH'"' .release-please-manifest.json)
           sed -i "s/appVersion:.*/appVersion: $VERSION/" $CHART_PATH/Chart.yaml
           # git diff returns an error if there are unstaged changes
           if git diff --quiet; then
             echo 'App Version already in sync.'
+            echo 'changed=false' >> $GITHUB_OUTPUT
           else
             echo 'App Version needs syncing. Making commit.'
             pipx install pybump
             pybump bump --file $CHART_PATH/Chart.yaml --level patch
-            # Using the gh cli produces a VERIFIED commit.
-            SHA=$(gh api '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml?ref='$BRANCH | jq -r .sha)
-            gh api --method PUT '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml' \
-              -F message='fix: update helm appVersion.' \
-              -F content="$(base64 -w0 -i $CHART_PATH/Chart.yaml)" \
-              -F 'committer[name]'='github-actions[bot]' \
-              -F 'committer[email]'='41898282+github-actions[bot]@users.noreply.github.com' \
-              -F sha="$SHA" \
-              -F branch="$BRANCH"
+            HELM_VERSION=$(pybump get --file $CHART_PATH/Chart.yaml)
+            echo "$(jq '."helm/hello-world"="'$HELM_VERSION'"' .release-please-manifest.json)" > .release-please-manifest.json
+            echo 'changed=true' >> $GITHUB_OUTPUT
           fi
+      - name: Create PR
+        if: ${{ steps.sync.outputs.changed }}
+        run: |
+            MANIFEST_B64=$(cat .release-please-manifest.json | base64)
+            CHART_B64=$(cat $CHART_PATH/Chart.yaml | base64)
+            envsubst < .github/commitTemplate.json |\
+              yq '.input.fileChanges.additions += {"path": ".release-please-manifest.json", "content": "'$MANIFEST_B64'" | @base64d}' |\
+              yq '.input.fileChanges.additions += {"path": "'$CHART_PATH/Chart.yaml'", "content": "'$CHART_B64'" | @base64d}' |\
+              yq '.input.branch.branchName = "'$HEAD_BRANCH'"' |\
+              yq '.input.message.headline = "chore: Sync Helm Chart appVersion."' |\
+              yq -o json > vars.json
+
+            # Using the gh cli produces a VERIFIED commit.
+            gh api graphql -f query=@.github/createCommit.gql -f variables=@vars.json
+            # SHA=$(gh api '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml?ref='$BRANCH | jq -r .sha)
+            # gh api --method PUT '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml' \
+            #   -F message='chore: update helm appVersion.' \
+            #   -F content="$(base64 -w0 -i $CHART_PATH/Chart.yaml)" \
+            #   -F 'committer[name]'='github-actions[bot]' \
+            #   -F 'committer[email]'='41898282+github-actions[bot]@users.noreply.github.com' \
+            #   -F sha="$SHA" \
+            #   -F branch="$BRANCH"
