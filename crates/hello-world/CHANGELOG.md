@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/alisamji-ybor/dummy/compare/hello-world-v1.3.0...hello-world-v1.3.1) (2025-09-27)
+
+
+### Bug Fixes
+
+* Smart Change. ([e139943](https://github.com/alisamji-ybor/dummy/commit/e139943d16a5689fe25803cff004f2309a98ad99))
+
 ## [1.3.0](https://github.com/alisamji-ybor/dummy/compare/hello-world-v1.2.0...hello-world-v1.3.0) (2025-09-27)
 
 
