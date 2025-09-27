@@ -58,6 +58,7 @@ jobs:
         with:
           ref: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
       - name: Sync App Version
+        id: sync
         run: |
           VERSION=$(jq -r '."'$APP_PATH'"' .release-please-manifest.json)
           sed -i "s/appVersion:.*/appVersion: $VERSION/" $CHART_PATH/Chart.yaml
