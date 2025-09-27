@@ -3,4 +3,5 @@ fn main() {
     println!("Dummy 2!");
     println!("Dummy 3!");
     println!("Dummy 4!");
+    println!("Dummy 5!");
 }
