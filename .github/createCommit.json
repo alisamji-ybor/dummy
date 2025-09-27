@@ -4,7 +4,7 @@
     "input": {
       "expectedHeadOid": "",
       "branch": {
-        "repositoryNameWithOwner": "$GITHUB_REPOSITORY",
+        "repositoryNameWithOwner": "",
         "branchName": ""
       },
       "message": {

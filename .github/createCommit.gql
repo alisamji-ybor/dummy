@@ -1,9 +1,0 @@
-mutation($input: CreateCommitOnBranchInput!) {
-  createCommitOnBranch(input: $input) {
-    commit {
-      oid
-      message
-    }
-  }
-}
-
