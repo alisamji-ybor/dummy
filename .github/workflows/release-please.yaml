@@ -81,10 +81,10 @@ jobs:
             MANIFEST_B64=$(base64 -w0 -i .release-please-manifest.json)
             CHART_B64=$(base64 -w0 -i $CHART_PATH/Chart.yaml)
             envsubst < .github/commitTemplate.json |\
-              yq '.input.fileChanges.additions += {"path": ".release-please-manifest.json", "content": "'$MANIFEST_B64'" | @base64d}' |\
-              yq '.input.fileChanges.additions += {"path": "'$CHART_PATH/Chart.yaml'", "content": "'$CHART_B64'" | @base64d}' |\
-              yq '.input.branch.branchName = "'$HEAD_BRANCH'"' |\
-              yq '.input.message.headline = "chore: Sync Helm Chart appVersion."' |\
+              yq '.fileChanges.additions += {"path": ".release-please-manifest.json", "content": "'$MANIFEST_B64'" | @base64d}' |\
+              yq '.fileChanges.additions += {"path": "'$CHART_PATH/Chart.yaml'", "content": "'$CHART_B64'" | @base64d}' |\
+              yq '.branch.branchName = "'$HEAD_BRANCH'"' |\
+              yq '.message.headline = "chore: Sync Helm Chart appVersion."' |\
               yq -o json > vars.json
 
             # Using the gh cli produces a VERIFIED commit.

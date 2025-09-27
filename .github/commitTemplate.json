@@ -1,16 +1,14 @@
 {
-  "input": {
-    "branch": {
-      "repositoryNameWithOwner": "$GITHUB_REPOSITORY",
-      "branchName": ""
-    },
-    "message": {
-      "headline": ""
-    },
-    "fileChanges": {
-      "additions": [],
-      "deletions": []
-    }
+  "branch": {
+    "repositoryNameWithOwner": "$GITHUB_REPOSITORY",
+    "branchName": ""
+  },
+  "message": {
+    "headline": ""
+  },
+  "fileChanges": {
+    "additions": [],
+    "deletions": []
   }
 }
 
