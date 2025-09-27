@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.3.0](https://github.com/alisamji-ybor/dummy/compare/hello-world-v1.2.0...hello-world-v1.3.0) (2025-09-27)
+
+
+### Features
+
+* Kill Fred. ([6beef77](https://github.com/alisamji-ybor/dummy/commit/6beef77b8716f5a6c62fd21325a6bcfee0eacbd5))
+
+
+### Bug Fixes
+
+* 6th time. ([020cbde](https://github.com/alisamji-ybor/dummy/commit/020cbde9424c324ee9554282b51b3c896dbc3415))
+* Hash? ([ead936a](https://github.com/alisamji-ybor/dummy/commit/ead936a2a12478d34696183e4f5ba182d2eb2dbb))
+* Lighten Fred's mood. ([9b7712f](https://github.com/alisamji-ybor/dummy/commit/9b7712f62a6e6b20013af8be7ba603770e0c24a5))
+* me ([5578835](https://github.com/alisamji-ybor/dummy/commit/5578835623f1e23098d05a268ad29ef3a0411dfe))
+* Mention Bread. ([93b4e4d](https://github.com/alisamji-ybor/dummy/commit/93b4e4de2ce27778b03bb5c6b08d224eb34794de))
+* Reset all. ([53dd2fd](https://github.com/alisamji-ybor/dummy/commit/53dd2fd211c21c6047291fcf54cdda4568342467))
+* Revive Fred. ([3124be7](https://github.com/alisamji-ybor/dummy/commit/3124be7dc18f66919e9338d84b7f7c55a7659b38))
+* Taste this. ([414f895](https://github.com/alisamji-ybor/dummy/commit/414f89525a77dbb4c5b7f049e844487ce947ffc7))
+* Try me. ([9e825a5](https://github.com/alisamji-ybor/dummy/commit/9e825a5695f8c0d32e97129dcdd608921b9dee11))
+* typo. ([d167ac7](https://github.com/alisamji-ybor/dummy/commit/d167ac7c0106763fe9e2ba27106b433b694afa0a))
+* unnecessary to be verb. ([6f94c80](https://github.com/alisamji-ybor/dummy/commit/6f94c80f62e84205788f102d40701ea669fd1c0f))
+* Video Game Reference. ([30c1c4d](https://github.com/alisamji-ybor/dummy/commit/30c1c4d920ef9d2d8e0854f35ecbad85d31a2269))
+
 ## [1.2.0](https://github.com/alisamji-ybor/dummy/compare/hello-world-v1.1.0...hello-world-v1.2.0) (2025-09-26)
 
 
