@@ -78,8 +78,8 @@ jobs:
         if: ${{ steps.sync.outputs.changed == 'true' }}
         run: |
             set -euxo pipefail
-            MANIFEST_B64=$(cat .release-please-manifest.json | base64)
-            CHART_B64=$(cat $CHART_PATH/Chart.yaml | base64)
+            MANIFEST_B64=$(base64 -w0 -i .release-please-manifest.json)
+            CHART_B64=$(base64 -w0 -i $CHART_PATH/Chart.yaml)
             envsubst < .github/commitTemplate.json |\
               yq '.input.fileChanges.additions += {"path": ".release-please-manifest.json", "content": "'$MANIFEST_B64'" | @base64d}' |\
               yq '.input.fileChanges.additions += {"path": "'$CHART_PATH/Chart.yaml'", "content": "'$CHART_B64'" | @base64d}' |\
