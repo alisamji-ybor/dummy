@@ -2,6 +2,7 @@
   "query": "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid message } } }",
   "variables": {
     "input": {
+      "expectedHeadOid": "",
       "branch": {
         "repositoryNameWithOwner": "$GITHUB_REPOSITORY",
         "branchName": ""

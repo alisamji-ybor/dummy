@@ -78,6 +78,7 @@ jobs:
         if: ${{ steps.sync.outputs.changed == 'true' }}
         run: |
             set -euxo pipefail
+            SHA=$(gh api '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml?ref='$BRANCH | jq -r .sha)
             MANIFEST_B64=$(base64 -w0 -i .release-please-manifest.json)
             CHART_B64=$(base64 -w0 -i $CHART_PATH/Chart.yaml)
             envsubst '$GITHUB_REPOSITORY' < .github/commitTemplate.json |\
@@ -85,6 +86,7 @@ jobs:
               yq '.variables.input.fileChanges.additions += {"path": "'$CHART_PATH/Chart.yaml'", "contents": "'$CHART_B64'"}' |\
               yq '.variables.input.branch.branchName = "'$HEAD_BRANCH'"' |\
               yq '.variables.input.message.headline = "chore: Sync Helm Chart appVersion."' |\
+              yq '.variables.input.expectedHeadOid = "'$SHA'"' |\
               yq -o json > body.json
 
             # Using the gh cli produces a VERIFIED commit.
