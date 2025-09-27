@@ -4,4 +4,5 @@ fn main() {
     println!("Fred dead!");
     println!("Fred alive again!");
     println!("Bread happy!");
+    println!("Bread & Fred!");
 }
