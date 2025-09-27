@@ -88,7 +88,7 @@ jobs:
               yq -o json > vars.json
 
             # Using the gh cli produces a VERIFIED commit.
-            gh api graphql -F query=@.github/createCommit.gql -F variables=@vars.json
+            gh api graphql -F query=@.github/createCommit.gql -F input=@vars.json
             # SHA=$(gh api '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml?ref='$BRANCH | jq -r .sha)
             # gh api --method PUT '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml' \
             #   -F message='chore: update helm appVersion.' \
