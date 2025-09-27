@@ -77,6 +77,7 @@ jobs:
       - name: Create PR
         if: ${{ steps.sync.outputs.changed == 'true' }}
         run: |
+            set -euxo pipefail
             MANIFEST_B64=$(cat .release-please-manifest.json | base64)
             CHART_B64=$(cat $CHART_PATH/Chart.yaml | base64)
             envsubst < .github/commitTemplate.json |\
