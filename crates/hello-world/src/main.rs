@@ -1,6 +1,6 @@
 fn main() {
     println!("Fred sad!");
     println!("Fred happy!");
-    println!("Fred is dead!");
-    println!("Fred is alive again!");
+    println!("Fred dead!");
+    println!("Fred alive again!");
 }
