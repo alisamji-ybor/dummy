@@ -1,14 +1,18 @@
 {
-  "branch": {
-    "repositoryNameWithOwner": "$GITHUB_REPOSITORY",
-    "branchName": ""
-  },
-  "message": {
-    "headline": ""
-  },
-  "fileChanges": {
-    "additions": [],
-    "deletions": []
+  "query": "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid message } } }",
+  "variables": {
+    "input": {
+      "branch": {
+        "repositoryNameWithOwner": "$GITHUB_REPOSITORY",
+        "branchName": ""
+      },
+      "message": {
+        "headline": ""
+      },
+      "fileChanges": {
+        "additions": [],
+        "deletions": []
+      }
+    }
   }
 }
-
