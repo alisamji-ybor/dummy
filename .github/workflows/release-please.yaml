@@ -81,8 +81,8 @@ jobs:
             MANIFEST_B64=$(base64 -w0 -i .release-please-manifest.json)
             CHART_B64=$(base64 -w0 -i $CHART_PATH/Chart.yaml)
             envsubst '$GITHUB_REPOSITORY' < .github/commitTemplate.json |\
-              yq '.variables.input.fileChanges.additions += {"path": ".release-please-manifest.json", "contents": "'$MANIFEST_B64'" | @base64d}' |\
-              yq '.variables.input.fileChanges.additions += {"path": "'$CHART_PATH/Chart.yaml'", "contents": "'$CHART_B64'" | @base64d}' |\
+              yq '.variables.input.fileChanges.additions += {"path": ".release-please-manifest.json", "contents": "'$MANIFEST_B64'"}' |\
+              yq '.variables.input.fileChanges.additions += {"path": "'$CHART_PATH/Chart.yaml'", "contents": "'$CHART_B64'"}' |\
               yq '.variables.input.branch.branchName = "'$HEAD_BRANCH'"' |\
               yq '.variables.input.message.headline = "chore: Sync Helm Chart appVersion."' |\
               yq -o json > body.json
