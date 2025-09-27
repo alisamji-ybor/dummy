@@ -50,6 +50,7 @@ jobs:
       CHART_PATH: helm/hello-world
       APP_PATH: crates/hello-world
       HEAD_BRANCH: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
+      BASE_BRANCH: ${{ fromJSON(needs.release-please.outputs.pr).baseBranchName }}
       GH_TOKEN: ${{ github.token }}
 
     steps:
@@ -69,11 +70,16 @@ jobs:
           else
             echo 'App Version needs syncing. Making commit.'
             pipx install pybump
-            # TODO: Bump is only necessary if helm chart is not otherwise being modified in PR.
-            pybump bump --file $CHART_PATH/Chart.yaml --level patch
-            HELM_VERSION=$(pybump get --file $CHART_PATH/Chart.yaml)
-            echo "$(jq '."'$CHART_PATH'"="'$HELM_VERSION'"' .release-please-manifest.json)" > .release-please-manifest.json
-            ###
+            HEAD_SHA=$(gh api '/repos/${{ github.repository }}/branches/'$HEAD_BRANCH | jq -r .commit.sha)
+            BASE_SHA=$(gh api '/repos/${{ github.repository }}/branches/'$BASE_BRANCH | jq -r .commit.sha)
+            if [ "$HEAD_SHA" == "$BASE_SHA" ]; then
+              echo 'Helm chart version is already being bumped. Only appVersion sync required.'
+            else
+              echo 'Need to bump Helm chart version as well.'
+              pybump bump --file $CHART_PATH/Chart.yaml --level patch
+              HELM_VERSION=$(pybump get --file $CHART_PATH/Chart.yaml)
+              echo "$(jq '."'$CHART_PATH'"="'$HELM_VERSION'"' .release-please-manifest.json)" > .release-please-manifest.json
+            fi
             echo 'changed=true' >> $GITHUB_OUTPUT
           fi
       - name: Create PR
