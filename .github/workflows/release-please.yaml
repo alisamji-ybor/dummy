@@ -78,7 +78,7 @@ jobs:
         if: ${{ steps.sync.outputs.changed == 'true' }}
         run: |
             set -euxo pipefail
-            SHA=$(gh api '/repos/${{ github.repository }}/contents/'$CHART_PATH'/Chart.yaml?ref='$HEAD_BRANCH | jq -r .sha)
+            SHA=$(gh api '/repos/${{ github.repository }}/branches/'$HEAD_BRANCH | jq -r .commit.sha)
             MANIFEST_B64=$(base64 -w0 -i .release-please-manifest.json)
             CHART_B64=$(base64 -w0 -i $CHART_PATH/Chart.yaml)
             envsubst '$GITHUB_REPOSITORY' < .github/commitTemplate.json |\
