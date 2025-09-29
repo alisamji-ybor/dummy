@@ -17,21 +17,29 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    # TODO: Force Publish Helm off of the current branch.
-    - name: Checkout PR branch
-      if: ${{ fromJSON(inputs.release-please-outputs).prs_created || fromJSON(inputs.release-please-outputs).pr_created }}
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ fromJSON(fromJSON(inputs.release-please-outputs).pr || '{}').headBranchName }}
-        path: pr-workspace
-    - name: Sync Helm Version
-      if: ${{ fromJSON(inputs.release-please-outputs).prs_created || fromJSON(inputs.release-please-outputs).pr_created }}
+    - name: Debug Me
       shell: bash
-      working-directory: pr-workspace
       env:
-        CHART_PATH: ${{ inputs.chart-path }}
-        APP_PATH: ${{ inputs.app-path }}
-        HEAD_BRANCH: ${{ fromJSON(fromJSON(inputs.release-please-outputs).pr || '{}').headBranchName }}
-        BASE_BRANCH: ${{ fromJSON(fromJSON(inputs.release-please-outputs).pr || '{}').baseBranchName }}
-        GH_TOKEN: ${{ inputs.github-token }}
-      run: ${{ github.action_path }}/sync-helm-version.sh
+        RELEASE_PLEASE_OUTPUTS: ${{ inputs.release-please-outputs }}
+        RELEASE_PLEASE_OUTPUTS_JSON: ${{ fromJSON(inputs.release-please-outputs) }}
+      run: |
+        echo "$RELEASE_PLEASE_OUTPUTS"
+        echo "$RELEASE_PLEASE_OUTPUTS_JSON"
+    # TODO: Force Publish Helm off of the current branch.
+    # - name: Checkout PR branch
+    #   if: ${{ fromJSON(inputs.release-please-outputs).prs_created || fromJSON(inputs.release-please-outputs).pr_created }}
+    #   uses: actions/checkout@v4
+    #   with:
+    #     ref: ${{ fromJSON(fromJSON(inputs.release-please-outputs).pr || '{}').headBranchName }}
+    #     path: pr-workspace
+    # - name: Sync Helm Version
+    #   if: ${{ fromJSON(inputs.release-please-outputs).prs_created || fromJSON(inputs.release-please-outputs).pr_created }}
+    #   shell: bash
+    #   working-directory: pr-workspace
+    #   env:
+    #     CHART_PATH: ${{ inputs.chart-path }}
+    #     APP_PATH: ${{ inputs.app-path }}
+    #     HEAD_BRANCH: ${{ fromJSON(fromJSON(inputs.release-please-outputs).pr || '{}').headBranchName }}
+    #     BASE_BRANCH: ${{ fromJSON(fromJSON(inputs.release-please-outputs).pr || '{}').baseBranchName }}
+    #     GH_TOKEN: ${{ inputs.github-token }}
+    #   run: ${{ github.action_path }}/sync-helm-version.sh
