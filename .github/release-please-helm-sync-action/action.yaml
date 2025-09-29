@@ -22,7 +22,7 @@ runs:
   using: 'composite'
   steps:
     - name: Tag Helm Release and Create GitHub Release
-      if: ${{ (fromJSON(inputs.release-please-outputs).release_created || fromJSON(inputs.release-please-outputs).release_created) == 'true' }}
+      if: ${{ (fromJSON(inputs.release-please-outputs).releases_created || fromJSON(inputs.release-please-outputs).release_created) == 'true' }}
       shell: bash
       env:
         CREATE_GITHUB_RELEASE: ${{ inputs.create-github-release }}
