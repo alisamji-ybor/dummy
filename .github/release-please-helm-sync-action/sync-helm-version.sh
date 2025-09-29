@@ -63,7 +63,7 @@ if [[ "${GITHUB_OUTPUT:-}" == *"changed=true"* ]]; then
     SHA=$(gh api '/repos/'$GITHUB_REPOSITORY'/branches/'$HEAD_BRANCH | jq -r .commit.sha)
     MANIFEST_B64=$(base64 -w0 -i .release-please-manifest.json)
     CHART_B64=$(base64 -w0 -i $CHART_PATH/Chart.yaml)
-    cat .github/createCommit.json |\
+    cat $GITHUB_ACTION_PATH/createCommit.json |\
         yq '.variables.input.fileChanges.additions += {"path": ".release-please-manifest.json", "contents": "'$MANIFEST_B64'"}' |\
         yq '.variables.input.fileChanges.additions += {"path": "'$CHART_PATH/Chart.yaml'", "contents": "'$CHART_B64'"}' |\
         yq '.variables.input.branch.branchName = "'$HEAD_BRANCH'"' |\

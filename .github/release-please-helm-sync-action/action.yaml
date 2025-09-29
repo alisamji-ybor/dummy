@@ -1,0 +1,31 @@
+name: 'Sync Helm Chart appVersion'
+description: 'Syncs Helm chart appVersion with the app version from release-please manifest'
+inputs:
+  chart-path:
+    description: 'Path to the Helm chart directory'
+    required: true
+  app-path:
+    description: 'Path to the app in release-please manifest'
+    required: true
+  head-branch:
+    description: 'Head branch name for the PR'
+    required: true
+  base-branch:
+    description: 'Base branch name for the PR'
+    required: true
+  github-token:
+    description: 'GitHub token for API access'
+    required: false
+    default: ${{ github.token }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Sync Helm Version
+      shell: bash
+      env:
+        CHART_PATH: ${{ inputs.chart-path }}
+        APP_PATH: ${{ inputs.app-path }}
+        HEAD_BRANCH: ${{ inputs.head-branch }}
+        BASE_BRANCH: ${{ inputs.base-branch }}
+        GH_TOKEN: ${{ inputs.github-token }}
+      run: ${{ github.action_path }}/sync-helm-version.sh

@@ -59,4 +59,9 @@ jobs:
         with:
           ref: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
       - name: Sync App Version
-        run: .github/sync-helm-version.sh
+        uses: ./.github/release-please-helm-sync-action
+        with:
+          chart-path: ${{ env.CHART_PATH }}
+          app-path: ${{ env.APP_PATH }}
+          head-branch: ${{ env.HEAD_BRANCH }}
+          base-branch: ${{ env.BASE_BRANCH }}
