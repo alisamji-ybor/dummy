@@ -31,6 +31,6 @@ jobs:
         with:
           chart-path: helm/hello-world
           app-path: crates/hello-world
-          release-please-outputs: ${{ steps.release-please.outputs }}
+          release-please-outputs: ${{ toJSON(steps.release-please.outputs) }}
 
 # github.event.repository.default_branch
