@@ -51,6 +51,7 @@ sync_app_version() {
 
 bump_helm_version_if_needed() {
     pipx install pybump
+    set -x
     local head_sha=$(gh api '/repos/'$GITHUB_REPOSITORY'/contents/'$CHART_PATH'?ref='$HEAD_BRANCH | jq -r .sha)
     local base_sha=$(gh api '/repos/'$GITHUB_REPOSITORY'/contents/'$CHART_PATH'?ref='$BASE_BRANCH | jq -r .sha)
 
@@ -62,6 +63,7 @@ bump_helm_version_if_needed() {
     else
         echo 'Helm chart version is already being bumped. Only appVersion sync required.'
     fi
+    set +x
 }
 
 create_commit() {
