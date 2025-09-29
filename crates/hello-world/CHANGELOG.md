@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.4](https://github.com/alisamji-ybor/dummy/compare/hello-world-v2.0.3...hello-world-v2.0.4) (2025-09-29)
+
+
+### Bug Fixes
+
+* Try that. ([ede4726](https://github.com/alisamji-ybor/dummy/commit/ede472666ae0df225c0d7641e8d53dffc9f1b924))
+
 ## [2.0.3](https://github.com/alisamji-ybor/dummy/compare/hello-world-v2.0.2...hello-world-v2.0.3) (2025-09-29)
 
 
