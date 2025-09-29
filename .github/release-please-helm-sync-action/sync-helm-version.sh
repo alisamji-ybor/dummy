@@ -50,12 +50,12 @@ sync_app_version() {
 }
 
 bump_helm_version_if_needed() {
-    pipx install pybump
     local head_sha=$(gh api '/repos/'$GITHUB_REPOSITORY'/contents/'$CHART_PATH'/Chart.yaml?ref='$HEAD_BRANCH | jq -er .sha)
     local base_sha=$(gh api '/repos/'$GITHUB_REPOSITORY'/contents/'$CHART_PATH'/Chart.yaml?ref='$BASE_BRANCH | jq -er .sha)
 
     if [ "$head_sha" == "$base_sha" ]; then
         echo 'Need to bump Helm chart version as well.'
+        pipx install pybump
         pybump bump --file $CHART_PATH/Chart.yaml --level patch
         local helm_version=$(pybump get --file $CHART_PATH/Chart.yaml)
         echo "$(jq -e '."'$CHART_PATH'"="'$helm_version'"' .release-please-manifest.json)" > .release-please-manifest.json
