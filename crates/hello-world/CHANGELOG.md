@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.1](https://github.com/alisamji-ybor/dummy/compare/hello-world-v2.0.0...hello-world-v2.0.1) (2025-09-29)
+
+
+### Bug Fixes
+
+* Dummy app change. ([428a907](https://github.com/alisamji-ybor/dummy/commit/428a9076bd698bfeab76c7a64648cc92f44580a9))
+* F. ([395134f](https://github.com/alisamji-ybor/dummy/commit/395134f9f3d6ebea7a04efd55cb148c66ea6ccb3))
+* Grab correct path for jq. ([3e2c57f](https://github.com/alisamji-ybor/dummy/commit/3e2c57f1cd8f40684117786ed335e36fe1b95f54))
+* me ([593be83](https://github.com/alisamji-ybor/dummy/commit/593be83613071239dbb5585a2c87117fc596affb))
+* you ([cd57c0a](https://github.com/alisamji-ybor/dummy/commit/cd57c0a80a98a029bec1093f7ca47279b617a719))
+
 ## [2.0.0](https://github.com/alisamji-ybor/dummy/compare/hello-world-v1.3.1...hello-world-v2.0.0) (2025-09-27)
 
 
