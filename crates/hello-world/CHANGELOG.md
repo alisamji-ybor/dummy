@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/alisamji-ybor/dummy/compare/hello-world-v2.0.1...hello-world-v2.0.2) (2025-09-29)
+
+
+### Bug Fixes
+
+* Try app bump without explicit helm. ([39773f4](https://github.com/alisamji-ybor/dummy/commit/39773f4b4e07f666782412779bc69c109b99b8e6))
+
 ## [2.0.1](https://github.com/alisamji-ybor/dummy/compare/hello-world-v2.0.0...hello-world-v2.0.1) (2025-09-29)
 
 
