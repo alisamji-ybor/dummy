@@ -5,4 +5,5 @@ fn main() {
     println!("Smarty 4!");
     println!("Smarty 5!");
     println!("Smarty 10!");
+    println!("Smarty 11!");
 }
