@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.5](https://github.com/alisamji-ybor/dummy/compare/hello-world-v2.0.4...hello-world-v2.0.5) (2025-09-29)
+
+
+### Bug Fixes
+
+* Wow ([e52b3a6](https://github.com/alisamji-ybor/dummy/commit/e52b3a60f8a00576c6ae9d79f444b3b7d554c969))
+
 ## [2.0.4](https://github.com/alisamji-ybor/dummy/compare/hello-world-v2.0.3...hello-world-v2.0.4) (2025-09-29)
 
 
