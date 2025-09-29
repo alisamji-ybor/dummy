@@ -17,13 +17,16 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Boo
+      shell: bash
+      run: echo 'no'
     # TODO: Force Publish Helm off of the current branch.
-    - name: Checkout PR branch
-      if: ${{ inputs.release-please-outputs.prs_created || inputs.release-please-outputs.pr_created }}
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ fromJSON(inputs.release-please-outputs.pr || '{}').headBranchName }}
-        path: pr-workspace
+    # - name: Checkout PR branch
+    #   if: ${{ inputs.release-please-outputs.prs_created || inputs.release-please-outputs.pr_created }}
+    #   uses: actions/checkout@v4
+    #   with:
+    #     ref: ${{ fromJSON(inputs.release-please-outputs.pr || '{}').headBranchName }}
+    #     path: pr-workspace
     # - name: Sync Helm Version
     #   if: ${{ inputs.release-please-outputs.prs_created || inputs.release-please-outputs.pr_created }}
     #   shell: bash
