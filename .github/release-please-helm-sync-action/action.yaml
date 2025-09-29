@@ -7,11 +7,8 @@ inputs:
   app-path:
     description: 'Path to the app in release-please manifest'
     required: true
-  head-branch:
-    description: 'Head branch name for the PR'
-    required: true
-  base-branch:
-    description: 'Base branch name for the PR'
+  release-please-outputs:
+    description: 'Release-please step outputs'
     required: true
   github-token:
     description: 'GitHub token for API access'
@@ -20,18 +17,21 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    # TODO: Force Publish Helm off of the current branch.
     - name: Checkout PR branch
+      if: ${{ inputs.release-please-outputs.prs_created || inputs.release-please-outputs.pr_created }}
       uses: actions/checkout@v4
       with:
-        ref: ${{ inputs.head-branch }}
+        ref: ${{ fromJSON(inputs.release-please-outputs.pr || '{}').headBranchName }}
         path: pr-workspace
     - name: Sync Helm Version
+      if: ${{ inputs.release-please-outputs.prs_created || inputs.release-please-outputs.pr_created }}
       shell: bash
       working-directory: pr-workspace
       env:
         CHART_PATH: ${{ inputs.chart-path }}
         APP_PATH: ${{ inputs.app-path }}
-        HEAD_BRANCH: ${{ inputs.head-branch }}
-        BASE_BRANCH: ${{ inputs.base-branch }}
+        HEAD_BRANCH: ${{ fromJSON(inputs.release-please-outputs.pr || '{}').headBranchName }}
+        BASE_BRANCH: ${{ fromJSON(inputs.release-please-outputs.pr || '{}').baseBranchName }}
         GH_TOKEN: ${{ inputs.github-token }}
       run: ${{ github.action_path }}/sync-helm-version.sh

@@ -18,11 +18,6 @@ jobs:
       pull-requests: write
       contents: write
 
-    outputs:
-      release_created: ${{ steps.release-please.outputs.releases_created || steps.release-please.outputs.release_created }}
-      pr_created: ${{ steps.release-please.outputs.prs_created || steps.release-please.outputs.pr_created }}
-      pr: ${{ steps.release-please.outputs.pr || '{}' }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,13 +27,10 @@ jobs:
         with:
           token: ${{ github.token }}
       - name: Sync App Version
-        if: ${{ steps.release-please.outputs.prs_created || steps.release-please.outputs.pr_created }}
         uses: ./.github/release-please-helm-sync-action
         with:
           chart-path: helm/hello-world
           app-path: crates/hello-world
-          head-branch: ${{ fromJSON(steps.release-please.outputs.pr || '{}').headBranchName }}
-          base-branch: ${{ fromJSON(steps.release-please.outputs.pr || '{}').baseBranchName }}
-      # TODO: Force Publish Helm
+          release-please-outputs: ${{ steps.release-please.outputs }}
 
 # github.event.repository.default_branch
