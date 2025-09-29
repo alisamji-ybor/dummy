@@ -14,15 +14,49 @@ inputs:
     description: 'GitHub token for API access'
     required: false
     default: ${{ github.token }}
+  create-github-release:
+    description: 'Whether to create a GitHub release for helm package'
+    required: false
+    default: 'true'
 runs:
   using: 'composite'
   steps:
-    - name: Debug Me
+    - name: Tag Helm Release and Create GitHub Release
+      if: ${{ (fromJSON(inputs.release-please-outputs).release_created || fromJSON(inputs.release-please-outputs).release_created) == 'true' }}
       shell: bash
       env:
-        RELEASE_PLEASE_OUTPUTS: ${{ inputs.release-please-outputs }}
-      run: env
-    # TODO: Force Publish Helm off of the current branch.
+        CREATE_GITHUB_RELEASE: ${{ inputs.create-github-release }}
+        GH_TOKEN: ${{ inputs.github-token }}
+      run: |
+        # Parse release-please config to get helm package name
+        HELM_PACKAGE_NAME=$(jq -r '.packages["${{ inputs.chart-path }}"]["package-name"] // "${{ inputs.chart-path }}"' release-please-config.json)
+
+        # Get helm chart version
+        HELM_VERSION=$(jq -r '."${{ inputs.chart-path }}"' .release-please-manifest.json)
+        HELM_TAG="${HELM_PACKAGE_NAME}-v${HELM_VERSION}"
+
+        # Create and push git tag for helm package if it doesn't exist
+        if ! git tag -l | grep -q "^${HELM_TAG}$"; then
+          echo "Creating helm tag: $HELM_TAG"
+          git tag "$HELM_TAG"
+          git push origin "$HELM_TAG"
+        else
+          echo "Helm tag $HELM_TAG already exists"
+        fi
+
+        # Create GitHub release if enabled
+        if [[ "$CREATE_GITHUB_RELEASE" == "true" ]]; then
+          # Check if release already exists
+          if ! gh release view "$HELM_TAG" >/dev/null 2>&1; then
+            echo "Creating GitHub release for $HELM_TAG"
+            gh release create "$HELM_TAG" \
+              --title "$HELM_TAG" \
+              --notes "Helm chart release $HELM_VERSION" \
+              --target "$(git rev-parse HEAD)"
+          else
+            echo "GitHub release $HELM_TAG already exists"
+          fi
+        fi
     - name: Checkout PR branch
       if: ${{ (fromJSON(inputs.release-please-outputs).prs_created || fromJSON(inputs.release-please-outputs).pr_created) == 'true' }}
       uses: actions/checkout@v4
