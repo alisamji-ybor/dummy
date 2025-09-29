@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/alisamji-ybor/dummy/compare/helm-v2.0.0...helm-v2.0.1) (2025-09-29)
+
+
+### Bug Fixes
+
+* Dummy helm change. ([0d94b9d](https://github.com/alisamji-ybor/dummy/commit/0d94b9dcbd3e53caf98b7fa9e884ec887bb5cda1))
+
 ## [2.0.0](https://github.com/alisamji-ybor/dummy/compare/helm-v2.0.1...helm-v2.0.0) (2025-09-27)
 
 
