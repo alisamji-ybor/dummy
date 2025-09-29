@@ -19,7 +19,7 @@ inputs:
 outputs:
   release-please:
     description: 'The outputs from the nested release-please-action'
-    value: ${{ steps.release-please.outputs }}
+    value: ${{ toJSON(steps.release-please.outputs) }}
 
 runs:
   using: 'composite'
