@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.3](https://github.com/alisamji-ybor/dummy/compare/hello-world-v2.0.2...hello-world-v2.0.3) (2025-09-29)
+
+
+### Bug Fixes
+
+* Typo. ([09defed](https://github.com/alisamji-ybor/dummy/commit/09defed88f9dee157c2c136868fe0a809defafa9))
+
 ## [2.0.2](https://github.com/alisamji-ybor/dummy/compare/hello-world-v2.0.1...hello-world-v2.0.2) (2025-09-29)
 
 
