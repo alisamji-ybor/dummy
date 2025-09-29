@@ -36,7 +36,7 @@ jobs:
           HELM_TAG="${HELM_PACKAGE_NAME}-v${HELM_VERSION}"
 
           # Create and push git tag for helm package if it doesn't exist
-          if ! git tag -l | grep -q "^${HELM_TAG}$"; then
+          if ! git ls-remote --tags origin | grep -q "refs/tags/${HELM_TAG}$"; then
             echo "Creating helm tag: $HELM_TAG"
             git tag "$HELM_TAG"
             git push origin "$HELM_TAG"
