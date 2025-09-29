@@ -21,52 +21,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Tag Helm Release and Create GitHub Release
-        shell: bash
-        env:
-          CREATE_GITHUB_RELEASE: "true"
-          GH_TOKEN: ${{ github.token }}
-          CHART_PATH: helm/hello-world
-        run: |
-          # Parse release-please config to get helm package name
-          HELM_PACKAGE_NAME=$(jq -er '.packages["${{ env.CHART_PATH }}"]["package-name"] // "${{ env.CHART_PATH }}"' release-please-config.json)
-
-          # Get helm chart version
-          HELM_VERSION=$(jq -er '."${{ env.CHART_PATH }}"' .release-please-manifest.json)
-          HELM_TAG="${HELM_PACKAGE_NAME}-v${HELM_VERSION}"
-
-          # Create and push git tag for helm package if it doesn't exist
-          if ! git ls-remote --tags origin | grep -q "refs/tags/${HELM_TAG}$"; then
-            echo "Creating helm tag: $HELM_TAG"
-            git tag "$HELM_TAG"
-            git push origin "$HELM_TAG"
-          else
-            echo "Helm tag $HELM_TAG already exists"
-          fi
-
-          # Create GitHub release if enabled
-          if [[ "$CREATE_GITHUB_RELEASE" == "true" ]]; then
-            # Check if release already exists
-            if ! gh release view "$HELM_TAG" >/dev/null 2>&1; then
-              echo "Creating GitHub release for $HELM_TAG"
-              gh release create "$HELM_TAG" \
-                --title "$HELM_TAG" \
-                --notes "Helm chart release $HELM_VERSION" \
-                --target "$(git rev-parse HEAD)"
-            else
-              echo "GitHub release $HELM_TAG already exists"
-            fi
-          fi
-      - name: Run release-please
+      - name: Release Please with Helm
         id: release-please
-        uses: googleapis/release-please-action@v4
-        with:
-          token: ${{ github.token }}
-      - name: Sync App Version
-        uses: ./.github/release-please-helm-sync-action
+        uses: ./.github/release-please-with-helm-action
         with:
           chart-path: helm/hello-world
           app-path: crates/hello-world
-          release-please-outputs: ${{ toJSON(steps.release-please.outputs) }}
 
 # github.event.repository.default_branch

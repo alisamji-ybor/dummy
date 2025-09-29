@@ -1,0 +1,85 @@
+name: 'Release Please with Helm'
+description: 'Runs release-please and handles a nested Helm chart'
+inputs:
+  chart-path:
+    description: 'Path to the Helm chart directory'
+    required: true
+  app-path:
+    description: 'Path to the app that the Helm chart is monitoring.'
+    required: true
+  github-token:
+    description: 'GitHub token for API access'
+    required: false
+    default: ${{ github.token }}
+  create-github-release:
+    description: 'Whether to create a GitHub release for helm package'
+    required: false
+    default: 'true'
+
+outputs:
+  release-please:
+    description: 'The outputs from the nested release-please-action'
+    value: ${{ steps.release-please.outputs }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Tag Helm Release and Create GitHub Release
+      shell: bash
+      env:
+        CHART_PATH: ${{ inputs.chart-path }}
+        CREATE_GITHUB_RELEASE: ${{ inputs.create-github-release }}
+        GH_TOKEN: ${{ inputs.github-token }}
+      run: |
+        # Parse release-please config to get helm package name
+        HELM_PACKAGE_NAME=$(jq -er '.packages["${{ inputs.chart-path }}"]["package-name"] // "${{ inputs.chart-path }}"' release-please-config.json)
+
+        # Get helm chart version
+        HELM_VERSION=$(jq -er '."${{ inputs.chart-path }}"' .release-please-manifest.json)
+        HELM_TAG="${HELM_PACKAGE_NAME}-v${HELM_VERSION}"
+
+        # Create and push git tag for helm package if it doesn't exist
+        if ! git ls-remote --tags origin | grep -q "refs/tags/${HELM_TAG}$"; then
+          echo "Creating helm tag: $HELM_TAG"
+          git tag "$HELM_TAG"
+          git push origin "$HELM_TAG"
+        else
+          echo "Helm tag $HELM_TAG already exists"
+        fi
+
+        # Create GitHub release if enabled
+        if [[ "$CREATE_GITHUB_RELEASE" == "true" ]]; then
+          # Check if release already exists
+          if ! gh release view "$HELM_TAG" >/dev/null 2>&1; then
+            echo "Creating GitHub release for $HELM_TAG"
+            gh release create "$HELM_TAG" \
+              --title "$HELM_TAG" \
+              --notes "Helm chart release $HELM_VERSION" \
+              --target "$(git rev-parse HEAD)"
+          else
+            echo "GitHub release $HELM_TAG already exists"
+          fi
+        fi
+    - name: Run release-please
+      id: release-please
+      uses: googleapis/release-please-action@v4
+      with:
+        token: ${{ inputs.github-token }}
+        skip-github-release: ${{ inputs.create-github-release != 'true' }}
+    - name: Checkout PR branch
+      if: ${{ (steps.release-please.outputs.prs_created || steps.release-please.outputs.pr_created) == 'true' }}
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ fromJSON(steps.release-please.outputs.pr || '{}').headBranchName }}
+        path: pr-workspace
+    - name: Sync Helm Version
+      if: ${{ (steps.release-please.outputs.prs_created || steps.release-please.outputs.pr_created) == 'true' }}
+      shell: bash
+      working-directory: pr-workspace
+      env:
+        CHART_PATH: ${{ inputs.chart-path }}
+        APP_PATH: ${{ inputs.app-path }}
+        HEAD_BRANCH: ${{ fromJSON(steps.release-please.outputs.pr || '{}').headBranchName }}
+        BASE_BRANCH: ${{ fromJSON(steps.release-please.outputs.pr || '{}').baseBranchName }}
+        GH_TOKEN: ${{ inputs.github-token }}
+      run: ${{ github.action_path }}/sync-helm-version.sh
