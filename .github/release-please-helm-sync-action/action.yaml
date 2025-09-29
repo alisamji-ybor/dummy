@@ -20,8 +20,14 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Checkout PR branch
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.head-branch }}
+        path: pr-workspace
     - name: Sync Helm Version
       shell: bash
+      working-directory: pr-workspace
       env:
         CHART_PATH: ${{ inputs.chart-path }}
         APP_PATH: ${{ inputs.app-path }}
