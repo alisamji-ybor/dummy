@@ -21,10 +21,8 @@ runs:
       shell: bash
       env:
         RELEASE_PLEASE_OUTPUTS: ${{ inputs.release-please-outputs }}
-        RELEASE_PLEASE_OUTPUTS_JSON: ${{ fromJSON(inputs.release-please-outputs) }}
-      run: |
-        echo "$RELEASE_PLEASE_OUTPUTS"
-        echo "$RELEASE_PLEASE_OUTPUTS_JSON"
+        PR_CREATED: ${{ fromJSON(inputs.release-please-outputs).prs_created || fromJSON(inputs.release-please-outputs).pr_created }}
+      run: env
     # TODO: Force Publish Helm off of the current branch.
     # - name: Checkout PR branch
     #   if: ${{ fromJSON(inputs.release-please-outputs).prs_created || fromJSON(inputs.release-please-outputs).pr_created }}
