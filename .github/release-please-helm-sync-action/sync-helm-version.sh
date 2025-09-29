@@ -51,16 +51,16 @@ sync_app_version() {
 
 bump_helm_version_if_needed() {
     pipx install pybump
-    local head_sha=$(gh api '/repos/'$GITHUB_REPOSITORY'/branches/'$HEAD_BRANCH | jq -r .commit.sha)
-    local base_sha=$(gh api '/repos/'$GITHUB_REPOSITORY'/branches/'$BASE_BRANCH | jq -r .commit.sha)
+    local head_sha=$(gh api '/repos/'$GITHUB_REPOSITORY'/contents/'$CHART_PATH'?ref='$HEAD_BRANCH | jq -r .sha)
+    local base_sha=$(gh api '/repos/'$GITHUB_REPOSITORY'/contents/'$CHART_PATH'?ref='$BASE_BRANCH | jq -r .sha)
 
     if [ "$head_sha" == "$base_sha" ]; then
-        echo 'Helm chart version is already being bumped. Only appVersion sync required.'
-    else
         echo 'Need to bump Helm chart version as well.'
         pybump bump --file $CHART_PATH/Chart.yaml --level patch
         local helm_version=$(pybump get --file $CHART_PATH/Chart.yaml)
         echo "$(jq '."'$CHART_PATH'"="'$helm_version'"' .release-please-manifest.json)" > .release-please-manifest.json
+    else
+        echo 'Helm chart version is already being bumped. Only appVersion sync required.'
     fi
 }
 
@@ -69,7 +69,7 @@ create_commit() {
     local manifest_b64=$(base64 -w0 -i .release-please-manifest.json)
     local chart_b64=$(base64 -w0 -i $CHART_PATH/Chart.yaml)
 
-    cat .github/createCommit.json |\
+    cat $GITHUB_ACTION_PATH/createCommit.json |\
         yq '.variables.input.fileChanges.additions += {"path": ".release-please-manifest.json", "contents": "'$manifest_b64'"}' |\
         yq '.variables.input.fileChanges.additions += {"path": "'$CHART_PATH/Chart.yaml'", "contents": "'$chart_b64'"}' |\
         yq '.variables.input.branch.branchName = "'$HEAD_BRANCH'"' |\
