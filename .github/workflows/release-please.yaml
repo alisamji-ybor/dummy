@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v4
       - run: env
       - name: P6M Release
-        uses: p6m-actions/p6m-release-action@v1
+        uses: p6m-actions/p6m-release-action@main
         with:
           language: rust
           enable_helm: 'true'
