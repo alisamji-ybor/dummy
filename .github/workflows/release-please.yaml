@@ -10,22 +10,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  release-please:
-    name: Create Release or Bump Version
+  # release-please:
+  #   name: Create Release or Bump Version
+  #   runs-on: ubuntu-latest
+  #
+  #   permissions:
+  #     pull-requests: write
+  #     contents: write
+  #
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+  #     - name: Release Please with Helm
+  #       id: release-please
+  #       uses: ./.github/release-please-with-helm-action
+  #       with:
+  #         chart-path: helm/hello-world
+  #         app-path: crates/hello-world
+  #
+  bump-it:
+    name: Release New Version
     runs-on: ubuntu-latest
 
     permissions:
-      pull-requests: write
       contents: write
+      id-token: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Release Please with Helm
-        id: release-please
-        uses: ./.github/release-please-with-helm-action
+      - name: P6M Release
+        uses: p6m-actions/p6m-release-action@v1
         with:
-          chart-path: helm/hello-world
-          app-path: crates/hello-world
+          language: rust
+          enable_helm: 'true'
+          helm_chart: helm/hello-world
 
 # github.event.repository.default_branch
