@@ -39,6 +39,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - run: env
       - name: P6M Release
         uses: p6m-actions/p6m-release-action@v1
         with:
